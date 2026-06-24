@@ -1,8 +1,6 @@
-import { FORMS } from '../data/forms';
-
-const ConfirmationScreen = ({ t, lang, request, onGoHome, onGoRequests }) => {
+const ConfirmationScreen = ({ t, lang, request, forms, onGoHome, onGoRequests }) => {
   const isTH = lang === 'th';
-  const formData = FORMS.find(f => f.id === request.formId);
+  const formData = forms.find(f => f.id === request.formId);
 
   return (
     <div style={{ padding: '8px 18px 28px', textAlign: 'center' }}>

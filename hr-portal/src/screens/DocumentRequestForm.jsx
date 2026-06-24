@@ -1,9 +1,7 @@
-import { FORMS } from '../data/forms';
-
-const DocumentRequestForm = ({ t, lang, formType, onSubmit, onCancel }) => {
+const DocumentRequestForm = ({ t, lang, formType, forms, onSubmit, onCancel }) => {
   const isTH = lang === 'th';
-  const documentTypes = FORMS.filter(f => f.cat === 'documents');
-  const selectedDoc = FORMS.find(f => f.id === formType);
+  const documentTypes = forms.filter(f => f.cat === 'documents');
+  const selectedDoc = forms.find(f => f.id === formType);
 
   return (
     <div style={{ padding: '8px 18px 28px' }}>

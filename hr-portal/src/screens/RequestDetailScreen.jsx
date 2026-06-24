@@ -1,8 +1,6 @@
-import { FORMS } from '../data/forms';
-
-const RequestDetailScreen = ({ t, lang, request, onCancel, onBack }) => {
+const RequestDetailScreen = ({ t, lang, request, forms, onCancel, onBack }) => {
   const isTH = lang === 'th';
-  const formData = FORMS.find(f => f.id === request.formId);
+  const formData = forms.find(f => f.id === request.formId);
 
   // Status display
   const getStatusDisplay = (status) => {

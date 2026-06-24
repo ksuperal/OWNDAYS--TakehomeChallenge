@@ -12,7 +12,11 @@
       "Bash(node generate-icons.js:*)",
       "Bash(npm run build:*)",
       "Bash(taskkill:*)",
-      "Bash(del sampleRequests.js)"
+      "Bash(del sampleRequests.js)",
+      "Bash(vercel --version:*)",
+      "Bash(vercel --yes:*)",
+      "Bash(vercel login:*)",
+      "Bash(vercel:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,6 @@
-import { FORMS } from '../data/forms';
 import { getStatusBadge } from '../utils/statusHelpers';
 
-const RequestsListScreen = ({ t, lang, requests, filter, onFilterChange, onViewDetail }) => {
+const RequestsListScreen = ({ t, lang, requests, forms, filter, onFilterChange, onViewDetail }) => {
   const isTH = lang === 'th';
 
   // Filter requests based on selected filter
@@ -73,6 +72,7 @@ const RequestsListScreen = ({ t, lang, requests, filter, onFilterChange, onViewD
               request={request}
               lang={lang}
               t={t}
+              forms={forms}
               onViewDetail={onViewDetail}
             />
           ))}
@@ -105,9 +105,9 @@ const FilterTab = ({ label, count, isActive, onClick }) => (
 );
 
 // Request Card Component
-const RequestCard = ({ request, lang, t, onViewDetail }) => {
+const RequestCard = ({ request, lang, t, forms, onViewDetail }) => {
   const isTH = lang === 'th';
-  const formData = FORMS.find(f => f.id === request.formId);
+  const formData = forms.find(f => f.id === request.formId);
   const statusBadge = getStatusBadge(request.status, lang);
 
   return (

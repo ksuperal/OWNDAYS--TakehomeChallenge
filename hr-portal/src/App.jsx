@@ -12,9 +12,11 @@ import RequestsListScreen from './screens/RequestsListScreen';
 import RequestDetailScreen from './screens/RequestDetailScreen';
 import CategoryScreen from './screens/CategoryScreen';
 import HRAdminScreen from './screens/HRAdminScreen';
+import FormManagementScreen from './screens/FormManagementScreen';
+import LeaderboardScreen from './screens/LeaderboardScreen';
 import { useAppState } from './hooks/useAppState';
+import { useForms } from './hooks/useForms';
 import { TRANSLATIONS } from './data/translations';
-import { FORMS } from './data/forms';
 import './App.css';
 
 function App() {
@@ -46,6 +48,12 @@ function App() {
     goToScreen,
     resetForm
   } = state;
+
+  // Use editable forms hook
+  const { forms, addForm, updateForm, deleteForm, resetToDefaults } = useForms();
+
+  // HR Admin tab state (requests or forms)
+  const [hrAdminTab, setHrAdminTab] = useState('requests');
 
   const t = TRANSLATIONS[lang];
   const isTH = lang === 'th';
@@ -145,6 +153,7 @@ function App() {
   // Navigation functions
   const handleGoHome = () => setScreen('home');
   const handleGoRequests = () => setScreen('requests');
+  const handleGoLeaderboard = () => setScreen('leaderboard');
   const handleGoProfile = () => setScreen('profile');
   const handleGoHRAdmin = () => setScreen('hradmin');
   const handleBack = () => {
@@ -196,6 +205,7 @@ function App() {
     documentForm: isTH ? 'ขอเอกสาร' : 'Request Document',
     requests: t.my_requests,
     detail: t.my_requests,
+    leaderboard: isTH ? 'กระดานผู้นำ' : 'Leaderboard',
     profile: t.nav_profile,
     category: t[`cat_${activeCat}`],
     hradmin: isTH ? 'แดชบอร์ด HR' : 'HR Dashboard',
@@ -207,7 +217,7 @@ function App() {
   const pendingCount = requests.filter(r => r.status === 'submitted' || r.status === 'inprogress').length;
 
   // Determine if nav should show
-  const showNav = isAuthenticated && ['home', 'requests', 'profile', 'detail'].includes(screen);
+  const showNav = isAuthenticated && ['home', 'requests', 'leaderboard', 'profile', 'detail'].includes(screen);
 
   // Show login screen if not authenticated
   if (!isAuthenticated) {
@@ -250,6 +260,7 @@ function App() {
             t={t}
             staffName={staffName}
             requests={requests}
+            forms={forms}
             onStartLeave={handleStartLeave}
             onGetDocument={handleGetDocument}
             onOpenCat={handleOpenCat}
@@ -265,6 +276,7 @@ function App() {
             t={t}
             lang={lang}
             state={state}
+            forms={forms}
             onSubmit={handleSubmitLeave}
             onCancel={() => {
               resetForm();
@@ -278,6 +290,7 @@ function App() {
             t={t}
             lang={lang}
             formType="emp_cert"
+            forms={forms}
             onSubmit={(data) => handleSubmitDocument('emp_cert', data)}
             onCancel={() => setScreen('home')}
           />
@@ -288,6 +301,7 @@ function App() {
             t={t}
             lang={lang}
             request={lastReq}
+            forms={forms}
             onGoHome={handleGoHome}
             onGoRequests={handleGoRequests}
           />
@@ -298,6 +312,7 @@ function App() {
             t={t}
             lang={lang}
             requests={requests}
+            forms={forms}
             filter={reqFilter}
             onFilterChange={setReqFilter}
             onViewDetail={handleViewDetail}
@@ -309,6 +324,7 @@ function App() {
             t={t}
             lang={lang}
             request={requests.find(r => r.id === detailId)}
+            forms={forms}
             onCancel={handleCancelRequest}
             onBack={() => setScreen('requests')}
           />
@@ -319,6 +335,7 @@ function App() {
             t={t}
             lang={lang}
             category={activeCat}
+            forms={forms}
             onSelectForm={(formId) => {
               // Navigate to the appropriate form based on formId
               if (formId.includes('leave') || formId === 'annual' || formId === 'sick' || formId === 'personal' || formId === 'maternity' || formId === 'monk') {
@@ -332,13 +349,81 @@ function App() {
         )}
 
         {screen === 'hradmin' && (
-          <HRAdminScreen
-            t={t}
+          <div>
+            {/* HR Admin Tabs */}
+            <div style={{
+              display: 'flex',
+              gap: '8px',
+              padding: '8px 18px 0',
+              background: '#f7f9fc',
+              borderBottom: '2px solid #e8ecf1'
+            }}>
+              <button
+                onClick={() => setHrAdminTab('requests')}
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: hrAdminTab === 'requests' ? '#1f6feb' : '#5b6b80',
+                  background: hrAdminTab === 'requests' ? 'white' : 'transparent',
+                  border: 'none',
+                  borderBottom: hrAdminTab === 'requests' ? '3px solid #1f6feb' : '3px solid transparent',
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {isTH ? '📋 คำขอ' : '📋 Requests'}
+              </button>
+              <button
+                onClick={() => setHrAdminTab('forms')}
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  color: hrAdminTab === 'forms' ? '#722ed1' : '#5b6b80',
+                  background: hrAdminTab === 'forms' ? 'white' : 'transparent',
+                  border: 'none',
+                  borderBottom: hrAdminTab === 'forms' ? '3px solid #722ed1' : '3px solid transparent',
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  transition: 'all 0.2s'
+                }}
+              >
+                {isTH ? '⚙️ ฟอร์ม' : '⚙️ Forms'}
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            {hrAdminTab === 'requests' ? (
+              <HRAdminScreen
+                t={t}
+                lang={lang}
+                requests={requests}
+                forms={forms}
+                onViewDetail={handleViewDetail}
+                onApprove={handleApproveRequest}
+                onReject={handleRejectRequest}
+              />
+            ) : (
+              <FormManagementScreen
+                forms={forms}
+                onAddForm={addForm}
+                onUpdateForm={updateForm}
+                onDeleteForm={deleteForm}
+                onResetDefaults={resetToDefaults}
+                lang={lang}
+              />
+            )}
+          </div>
+        )}
+
+        {screen === 'leaderboard' && (
+          <LeaderboardScreen
             lang={lang}
-            requests={requests}
-            onViewDetail={handleViewDetail}
-            onApprove={handleApproveRequest}
-            onReject={handleRejectRequest}
+            user={user}
           />
         )}
 
@@ -364,6 +449,7 @@ function App() {
           t={t}
           onGoHome={handleGoHome}
           onGoRequests={handleGoRequests}
+          onGoLeaderboard={handleGoLeaderboard}
           onGoProfile={handleGoProfile}
           pendingCount={pendingCount}
         />

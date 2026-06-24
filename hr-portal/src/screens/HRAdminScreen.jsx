@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { FORMS } from '../data/forms';
 import { getStatusBadge } from '../utils/statusHelpers';
 
-const HRAdminScreen = ({ t, lang, requests, onViewDetail, onApprove, onReject }) => {
+const HRAdminScreen = ({ t, lang, requests, forms, onViewDetail, onApprove, onReject }) => {
   const isTH = lang === 'th';
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showCommentModal, setShowCommentModal] = useState(false);
@@ -209,6 +208,7 @@ const HRAdminScreen = ({ t, lang, requests, onViewDetail, onApprove, onReject })
               lang={lang}
               t={t}
               isTH={isTH}
+              forms={forms}
               onViewDetail={onViewDetail}
               onApprove={(id) => handleOpenCommentModal(request, 'approve')}
               onReject={(id) => handleOpenCommentModal(request, 'reject')}
@@ -342,8 +342,8 @@ const HRAdminScreen = ({ t, lang, requests, onViewDetail, onApprove, onReject })
 };
 
 // HR Request Card Component
-const HRRequestCard = ({ request, lang, t, isTH, onViewDetail, onApprove, onReject, isPending }) => {
-  const formData = FORMS.find(f => f.id === request.formId);
+const HRRequestCard = ({ request, lang, t, isTH, forms, onViewDetail, onApprove, onReject, isPending }) => {
+  const formData = forms.find(f => f.id === request.formId);
   const statusBadge = getStatusBadge(request.status, lang);
 
   return (

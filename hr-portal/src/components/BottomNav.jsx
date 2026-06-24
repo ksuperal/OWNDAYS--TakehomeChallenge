@@ -1,10 +1,12 @@
-const BottomNav = ({ screen, t, onGoHome, onGoRequests, onGoProfile, pendingCount }) => {
+const BottomNav = ({ screen, t, onGoHome, onGoRequests, onGoLeaderboard, onGoProfile, pendingCount }) => {
   const isHome = screen === 'home';
   const isReq = screen === 'requests' || screen === 'detail';
+  const isLeaderboard = screen === 'leaderboard';
   const isProfile = screen === 'profile';
 
   const navHomeColor = isHome ? '#1f6feb' : '#aab6c6';
   const navReqColor = isReq ? '#1f6feb' : '#aab6c6';
+  const navLeaderboardColor = isLeaderboard ? '#1f6feb' : '#aab6c6';
   const navProfColor = isProfile ? '#1f6feb' : '#aab6c6';
 
   const hasPending = pendingCount > 0;
@@ -28,6 +30,12 @@ const BottomNav = ({ screen, t, onGoHome, onGoRequests, onGoProfile, pendingCoun
             {pendingCount}
           </span>
         )}
+      </button>
+      <button onClick={onGoLeaderboard} style={{ flex: 1, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', fontFamily: 'inherit' }}>
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke={navLeaderboardColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" />
+        </svg>
+        <span style={{ fontSize: '11px', fontWeight: 600, color: navLeaderboardColor }}>{t.nav_leaderboard || (t === 'th' ? 'อันดับ' : 'Ranks')}</span>
       </button>
       <button onClick={onGoProfile} style={{ flex: 1, background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', fontFamily: 'inherit' }}>
         <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke={navProfColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

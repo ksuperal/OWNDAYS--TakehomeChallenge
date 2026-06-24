@@ -1,8 +1,6 @@
-import { FORMS } from '../data/forms';
-
-const CategoryScreen = ({ t, lang, category, onSelectForm }) => {
+const CategoryScreen = ({ t, lang, category, forms, onSelectForm }) => {
   const isTH = lang === 'th';
-  const categoryForms = FORMS.filter(f => f.cat === category);
+  const categoryForms = forms.filter(f => f.cat === category);
 
   // Category icons
   const categoryIcons = {

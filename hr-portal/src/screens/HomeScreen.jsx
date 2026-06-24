@@ -1,7 +1,6 @@
 import { getStatusMeta, getBadgeStyle } from '../utils/statusHelpers';
-import { FORMS } from '../data/forms';
 
-const HomeScreen = ({ t, staffName, requests, onStartLeave, onGetDocument, onOpenCat, onGoRequests, onViewDetail, isHR, onGoHRAdmin }) => {
+const HomeScreen = ({ t, staffName, requests, forms, onStartLeave, onGetDocument, onOpenCat, onGoRequests, onViewDetail, isHR, onGoHRAdmin }) => {
   const recentRequests = requests.slice(0, 2);
 
   return (
@@ -70,7 +69,7 @@ const HomeScreen = ({ t, staffName, requests, onStartLeave, onGetDocument, onOpe
           recentRequests.map((req, i, arr) => {
             const statusMeta = getStatusMeta(req.status, t);
             const badgeStyle = getBadgeStyle(req.status, t);
-            const formData = FORMS.find(f => f.id === req.formId);
+            const formData = forms.find(f => f.id === req.formId);
             const typeLabel = formData ? (t === 'th' ? formData.th : formData.en) : req.formId;
 
             return (

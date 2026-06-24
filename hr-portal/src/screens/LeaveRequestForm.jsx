@@ -1,7 +1,7 @@
-import { FORMS, LEAVE_HINT } from '../data/forms';
+import { LEAVE_HINT } from '../data/forms';
 import DatePicker from '../components/DatePicker';
 
-const LeaveRequestForm = ({ t, lang, state, onSubmit, onCancel }) => {
+const LeaveRequestForm = ({ t, lang, state, forms, onSubmit, onCancel }) => {
   const {
     step,
     setStep,
@@ -12,7 +12,7 @@ const LeaveRequestForm = ({ t, lang, state, onSubmit, onCancel }) => {
   } = state;
 
   const isTH = lang === 'th';
-  const leaveTypes = FORMS.filter(f => f.cat === 'leave');
+  const leaveTypes = forms.filter(f => f.cat === 'leave');
 
   // Calculate days between dates
   const calculateDays = (start, end) => {
