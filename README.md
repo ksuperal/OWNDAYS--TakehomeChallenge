@@ -176,6 +176,4 @@ The app currently includes:
 
 This project is a React implementation of the original Claude Design prototype, maintaining the same visual design, interactions, and user experience while converting from a single HTML file to a modular React application.
 
-## License
 
-MIT
